@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class MinistryController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Ministry> getById(@PathVariable(value = "id") Long id) {
-        Ministry ministry = ministryRepository.findById(id).orElse(null);
+        Ministry ministry = ministryRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("Invalid ministry id %s", id)));
         return ResponseEntity.ok().body(ministry);
     }
 

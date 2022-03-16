@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +44,8 @@ public class MemberController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Member> getById(@PathVariable(value = "id") Long id) {
-        Member member= memberRepository.findById(id).orElse(null);
+        Member member= memberRepository.findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("Invalid member id %s", id)));
         return ResponseEntity.ok().body(member);
     }
 

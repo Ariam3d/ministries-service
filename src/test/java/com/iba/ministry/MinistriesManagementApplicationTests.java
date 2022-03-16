@@ -20,18 +20,43 @@ class MinistriesManagementApplicationTests {
 	@Autowired
 	MockMvc mockMvc;
 
+	// Testing API "Get all ministries", expected response: OK
 	@Test
-	void getAllMinistries() throws Exception {
+	public void getAllMinistries() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/ministries")
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
+				.andExpect(status().isOk())
+				.andReturn();
 	}
 
+	// Testing response API "Get a specific ministry", expected: OK
 	@Test
-	void getOneMinistry() throws Exception {
+	public void getOneMinistry() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get("/api/ministries/1")
 				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
+				.andExpect(status().isOk())
+				.andReturn();
+	}
+
+	// Testing response API "Get a specific ministry", expected: NotFound
+	@Test
+	public void returnNotFoundForInvalidSingleMinistry() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/ministries/7")
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound())
+				.andReturn();
+	}
+
+	// Testing response API "Create a ministry", expected: OK
+	@Test
+	public void addNewMinistry() throws Exception {
+		String ministry = "{\"name\":\"Adulto mayor\",\"description\":\"Ministerio de ayuda a los ancianos.\"}";
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/ministries")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(ministry)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
 	}
 
 }
