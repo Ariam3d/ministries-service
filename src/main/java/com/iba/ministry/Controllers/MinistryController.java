@@ -55,7 +55,7 @@ public class MinistryController {
     }
 
     // Assign new member to Ministry
-    // To-do, assign only active members
+
     @PutMapping("/{id}/members/{memberID}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Ministry assignMemberToMinistry(
