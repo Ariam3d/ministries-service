@@ -67,6 +67,8 @@ public class MinistryController {
                 String.format("Invalid member id %s", id)));
         assert ministry != null;
         assert member != null;
+
+        // Checks if the member is active, and if so then checks if it is already in the ministry
         if (member.isActive()){
             if (ministry.getMemberMinistry().contains(member)){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Member is already in the ministry, " +
