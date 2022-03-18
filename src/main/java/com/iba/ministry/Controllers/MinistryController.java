@@ -63,11 +63,22 @@ public class MinistryController {
             @PathVariable(value = "memberID") Long memberID
     ) {
         Ministry ministry = ministryRepository.findById(id).orElse(null);
-        Member member = memberRepository.findById(memberID).orElse(null);
+        Member member = memberRepository.findById(memberID).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                String.format("Invalid member id %s", id)));
         assert ministry != null;
         assert member != null;
-        ministry.setMember(member);
-        return ministryRepository.save(ministry);
+        if (member.isActive()){
+            if (ministry.getMemberMinistry().contains(member)){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Member is already in the ministry, " +
+                        "can't reassign a member");
+            }
+            ministry.setMember(member);
+            return ministryRepository.save(ministry);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Member is not active, " +
+                    "can't assign an inactive member into an active ministry");
+        }
     }
 
     // Remove member from Ministry
