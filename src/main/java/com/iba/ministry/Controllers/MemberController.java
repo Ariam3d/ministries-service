@@ -74,6 +74,7 @@ public class MemberController {
     }*/
 
     // Modify member
+    // To-do make an exception message
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public ResponseEntity<Member> update(@PathVariable(value = "id") Long id, @RequestBody Member input) {
